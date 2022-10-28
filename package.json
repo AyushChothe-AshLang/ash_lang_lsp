@@ -2,8 +2,14 @@
   "name": "ashlang",
   "displayName": "AshLang",
   "description": "AshLang Language support for VSCode",
+  "author": {
+    "name": "Ayush Chothe",
+    "email": "ayushmchothe@gmail.com",
+    "url": "https://sh0rt.now.sh/ASH"
+  },
+  "publisher": "AyushChothe",
   "repository": {
-    "url": "https://github.com/AyushChothe/ash_lang"
+    "url": "https://github.com/AyushChothe-AshLang/ash_lang_lsp"
   },
   "version": "0.0.1",
   "engines": {
@@ -16,7 +22,8 @@
     "onLanguage:ashlang",
     "onCommand:ashlang.run"
   ],
-  "main": "./client/out/extension",
+  "main": "./client/out/node/extension",
+  "browser": "./client/dist/web_extension.js",
   "contributes": {
     "languages": [
       {
@@ -50,7 +57,7 @@
     "commands": [
       {
         "command": "ashlang.run",
-        "title": "Run AshLang Code",
+        "title": "Run Code (AshLang)",
         "icon": "$(play)"
       }
     ],
@@ -91,20 +98,29 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "npm run compile && npm run compile-web",
     "compile": "tsc -b",
     "watch": "tsc -b -w",
     "lint": "eslint ./client/src ./server/src --ext .ts,.tsx",
     "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
-    "test": "sh ./scripts/e2e.sh"
+    "test": "sh ./scripts/e2e.sh",
+    "compile-web": "webpack",
+    "watch-web": "webpack --watch",
+    "package-web": "webpack --mode production --devtool hidden-source-map",
+    "chrome": "npm run compile-web && vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ./test-data"
   },
   "devDependencies": {
     "@types/mocha": "^9.1.0",
     "@types/node": "^16.11.7",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
+    "@vscode/test-web": "^0.0.22",
     "eslint": "^8.13.0",
     "mocha": "^9.2.1",
-    "typescript": "^4.7.2"
+    "path-browserify": "^1.0.1",
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.7.2",
+    "webpack": "^5.44.0",
+    "webpack-cli": "^4.7.2"
   }
 }
