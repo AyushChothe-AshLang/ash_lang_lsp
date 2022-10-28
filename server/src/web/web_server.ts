@@ -9,7 +9,7 @@ import {
   createConnection,
 } from "vscode-languageserver/browser";
 
-import init, { run } from "ash_lang";
+import init, { analyze, run } from "ash_lang";
 
 /* browser specific setup code */
 
@@ -34,16 +34,6 @@ connection.onExecuteCommand(async (req) => {
     return e;
   }
 });
-
-async function analyze(code: any) {
-  try {
-    let res = await run(code);
-    console.log("Diagnostic");
-    return "";
-  } catch (e) {
-    return e;
-  }
-}
 
 new SharedLSP(connection, init, (text: any, settings: any) => {
   return analyze(text);

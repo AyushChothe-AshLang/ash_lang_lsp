@@ -31,7 +31,6 @@ async function runCompiler(
 
   let stdout: string;
   try {
-    console.log(settings.executablePath);
     const output = await exec(
       `${settings.executablePath} ${flags} ${tmpFile.name}`,
       {

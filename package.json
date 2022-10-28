@@ -2,6 +2,7 @@
   "name": "ashlang",
   "displayName": "AshLang",
   "description": "AshLang Language support for VSCode",
+  "icon": "icon.png",
   "author": {
     "name": "Ayush Chothe",
     "email": "ayushmchothe@gmail.com",
@@ -11,7 +12,7 @@
   "repository": {
     "url": "https://github.com/AyushChothe-AshLang/ash_lang_lsp"
   },
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.71.0"
   },
@@ -52,8 +53,21 @@
           "command": "ashlang.run",
           "group": "navigation"
         }
+      ],
+      "editor/title/run": [
+        {
+          "when": "resourceLangId == ashlang",
+          "command": "ashlang.run",
+          "group": "navigation"
+        }
       ]
     },
+    "keybindings": [
+      {
+        "command": "ashlang.run",
+        "key": "alt+x"
+      }
+    ],
     "commands": [
       {
         "command": "ashlang.run",

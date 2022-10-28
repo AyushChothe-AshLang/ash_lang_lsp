@@ -50,6 +50,7 @@ export class SharedLSP {
         const result: InitializeResult = {
           capabilities: {
             textDocumentSync: TextDocumentSyncKind.Incremental,
+
             completionProvider: {
               resolveProvider: false,
             },
@@ -102,6 +103,10 @@ export class SharedLSP {
       }
       // Revalidate all open text documents
       this.documents.all().forEach(this.validateTextDocument);
+    });
+
+    this.connection.onCompletion((_) => {
+      return [];
     });
 
     this.documents.listen(this.connection);
