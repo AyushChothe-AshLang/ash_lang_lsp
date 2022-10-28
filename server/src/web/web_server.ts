@@ -35,6 +35,11 @@ connection.onExecuteCommand(async (req) => {
   }
 });
 
-new SharedLSP(connection, init, (text: any, settings: any) => {
-  return analyze(text);
+new SharedLSP(connection, init, async (text: any, settings: any) => {
+  try {
+    let res = await analyze(text);
+    return res;
+  } catch (e) {
+    return e;
+  }
 });
