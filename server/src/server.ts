@@ -130,6 +130,7 @@ async function runCompiler(
 
   let stdout: string;
   try {
+    console.log(settings.executablePath);
     const output = await exec(
       `${settings.executablePath} ${flags} ${tmpFile.name}`,
       {
@@ -138,9 +139,10 @@ async function runCompiler(
     );
     stdout = output.stdout;
   } catch (e: any) {
-    stdout = e.stdout;
+    stdout = e.stderr;
   }
-  connection.console.log(stdout);
+  stdout = stdout.slice(0, stdout.length - 2);
+  console.log(stdout);
   return stdout;
 }
 
@@ -156,7 +158,7 @@ interface ExampleSettings {
 // but could happen with other clients.
 const defaultSettings: ExampleSettings = {
   maxNumberOfProblems: 1000,
-  executablePath: "ash_lang",
+  executablePath: "ash_lang_cli",
   maxCompilerInvocationTime: 5000,
 };
 let globalSettings: ExampleSettings = defaultSettings;
@@ -238,7 +240,7 @@ connection.onDidChangeWatchedFiles((_change) => {
 });
 
 connection.onDocumentFormatting(async (params) => {
-  console.time("onDocumentFormatting");
+  console.time("onDocumentFormatting Rust");
   const document = documents.get(params.textDocument.uri);
   const settings = await getDocumentSettings(params.textDocument.uri);
 
@@ -251,7 +253,7 @@ connection.onDocumentFormatting(async (params) => {
       settings,
     );
     if (formatted.trim() != "") {
-      console.timeEnd("onDocumentFormatting");
+      console.timeEnd("onDocumentFormatting Rust");
       return [
         {
           range: {
@@ -263,7 +265,7 @@ connection.onDocumentFormatting(async (params) => {
       ];
     }
   }
-  console.timeEnd("onDocumentFormatting");
+  console.timeEnd("onDocumentFormatting Rust");
   return [];
 });
 // // This handler provides the initial list of the completion items.

@@ -13,7 +13,8 @@
     "Programming Languages"
   ],
   "activationEvents": [
-    "onLanguage:ashlang"
+    "onLanguage:ashlang",
+    "onCommand:ashlang.run"
   ],
   "main": "./client/out/extension",
   "contributes": {
@@ -35,6 +36,22 @@
         "language": "ashlang",
         "scopeName": "source.ash",
         "path": "./syntaxes/ashlang.tmLanguage.json"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "resourceLangId == ashlang",
+          "command": "ashlang.run",
+          "group": "navigation"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "ashlang.run",
+        "title": "Run AshLang Code",
+        "icon": "$(play)"
       }
     ],
     "configuration": {
@@ -61,7 +78,7 @@
         "ashlangServer.executablePath": {
           "scope": "resource",
           "type": "string",
-          "default": "ash_lang",
+          "default": "ash_lang_cli",
           "description": "The path to the ash_lang compiler executable."
         },
         "ashlangServer.maxCompilerInvocationTime": {

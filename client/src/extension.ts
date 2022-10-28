@@ -1,10 +1,11 @@
+import { window } from "vscode";
 /* --------------------------------------------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
 
 import * as path from "path";
-import { ExtensionContext, workspace } from "vscode";
+import { commands, ExtensionContext, workspace } from "vscode";
 
 import {
   LanguageClient,
@@ -44,6 +45,30 @@ export function activate(context: ExtensionContext) {
       fileEvents: workspace.createFileSystemWatcher("**/.clientrc"),
     },
   };
+
+  const run_command = commands.registerCommand("ashlang.run", () => {
+    let c_name = "AshLang Console";
+    let doc = window.activeTextEditor.document;
+    let settings = workspace.getConfiguration("ashlangServer");
+    let term;
+
+    window.terminals.forEach((t) => {
+      if (t.name == c_name) {
+        term = t;
+      }
+    });
+
+    if (term) {
+      term.show();
+      term.sendText(`${settings.executablePath} run ${doc.fileName}`);
+    } else {
+      let term = window.createTerminal(c_name);
+      term.show();
+      term.sendText(`${settings.executablePath} run ${doc.fileName}`);
+    }
+  });
+
+  context.subscriptions.push(run_command);
 
   // Create the language client and start the client.
   client = new LanguageClient(
